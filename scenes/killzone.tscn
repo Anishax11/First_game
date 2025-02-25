@@ -1,0 +1,58 @@
+[gd_scene load_steps=6 format=3 uid="uid://bd8oppaoxh0yh"]
+
+[ext_resource type="Script" path="res://script/killzone.gd" id="1_7gr1n"]
+[ext_resource type="AudioStream" uid="uid://cw65rqd03u8ot" path="res://assets/sounds/hurt.wav" id="2_u7slg"]
+
+[sub_resource type="Animation" id="Animation_48aom"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("hurt:playing")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="Animation" id="Animation_uvtal"]
+resource_name = "hurt"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("hurt:playing")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_ud31t"]
+_data = {
+"RESET": SubResource("Animation_48aom"),
+"hurt": SubResource("Animation_uvtal")
+}
+
+[node name="killzone" type="Area2D"]
+script = ExtResource("1_7gr1n")
+
+[node name="hurt" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("2_u7slg")
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 0.5
+one_shot = true
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_ud31t")
+}
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
